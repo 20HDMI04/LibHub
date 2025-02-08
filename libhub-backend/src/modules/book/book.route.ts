@@ -6,7 +6,6 @@ import { $ref } from "./book.schema";
 export default async function bookRoutes(server: FastifyInstance) {
     server.get("/", async (request:any, reply:any) => {
     const books = await prisma.book.findMany();
-    console.log(books);
     return books;  
   });
 
