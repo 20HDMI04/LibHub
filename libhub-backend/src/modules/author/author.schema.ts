@@ -1,7 +1,6 @@
 import {z} from 'zod';
 import { buildJsonSchemas } from "fastify-zod";
 
-
 const authorCore = {
     name: z.string({
         required_error: "Name is required",
@@ -15,8 +14,8 @@ const authorCore = {
 
 const authorGenerated = {
     id: z.number(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
 }
 
 const createAuthorSchema = z.object({
@@ -25,10 +24,13 @@ const createAuthorSchema = z.object({
 
 const authorResponseSchema = z.object({
     ...authorCore,
-    ...authorGenerated
+    ...authorGenerated,
+    books: z.array(z.object({
+        title: z.string()
+    })).optional()
 })
 
-const authorListResponseSchema = z.object({})
+const authorListResponseSchema = z.array(authorResponseSchema)
 
 export const {schemas: authorSchemas, $ref } = buildJsonSchemas({
     createAuthorSchema,

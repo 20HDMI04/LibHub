@@ -1,13 +1,16 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { registerAuthorHandler } from "./author.controller";
+import { registerAuthorHandler, getAuthorsHandler } from "./author.controller";
 import prisma from "../../utils/prisma";
 import { $ref } from "./author.schema";
 
 export async function authorRoutes(server: FastifyInstance) {
-    server.get("/", async (request:FastifyRequest, reply:FastifyReply) => {
-    const authors = await prisma.author.findMany();
-    return authors;  
-  });
+    server.get("/",{
+      schema:{
+        response: {
+          200: $ref("authorListResponseSchema")
+        }
+      }
+    }, getAuthorsHandler);
 
   server.post('/',
     {

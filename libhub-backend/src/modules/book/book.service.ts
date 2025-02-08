@@ -6,3 +6,29 @@ export async function createBook(input: CreateBookInput) {
         data: input
     });
 }
+
+export async function getBooks() {
+    return await prisma.book.findMany({
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            genre: true,
+            published: true,
+            author: {
+                select: {
+                    name: true,
+                    bio: true
+                }
+            }
+        }
+    });
+}
+
+export async function deleteBook(id: number) {
+    return await prisma.book.delete({
+        where: {
+            id
+        }
+    });
+}
