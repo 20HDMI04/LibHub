@@ -1,15 +1,28 @@
-import {books} from './routes/book';
-const dotenv = require('dotenv').config();
-const fastify = require('fastify')({
-    logger: true,
+import 'dotenv/config'
+import Fastify from 'fastify'
+import bookRoutes from './modules/book/book.route'
+import { bookSchemas } from './modules/book/book.schema'
+
+const server = Fastify({
+  logger: true
 })
 
-fastify.register(books, {fastify:fastify})
 
 
-fastify.listen({ port: process.env.PORT || 3000 }, (err:Error, address:any) => {
-    if (err) {
-      fastify.log.error(err)
-      process.exit(1)
-    }
-  })
+async function main() {
+  for (const schema of bookSchemas) {
+    server.addSchema(schema)
+  }
+  
+  server.register(bookRoutes, {prefix: 'api/books'});
+  
+  try {
+    server.listen({ port: 3000, host: '0.0.0.0' })
+  } catch (err:any) {
+    server.log.error(err)
+    process.exit(1)
+  }
+}
+
+
+main();
