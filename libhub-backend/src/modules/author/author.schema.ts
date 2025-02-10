@@ -32,6 +32,10 @@ const authorResponseSchema = z.object({
 
 const authorListResponseSchema = z.array(authorResponseSchema)
 
+const deleteAuthorSchema = z.object({
+    id: z.number()
+})
+
 export const {schemas: authorSchemas, $ref } = buildJsonSchemas({
     createAuthorSchema,
     authorResponseSchema,

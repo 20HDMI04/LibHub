@@ -24,3 +24,11 @@ export async function getAuthors() {
         }
     });
 }
+
+export async function deleteAuthor(id: number) {
+    return await prisma.author.delete({
+        where: {
+            id
+        }
+    });
+}
