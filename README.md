@@ -18,6 +18,7 @@ Retrieves all Authors and Books ordered by its ID.
 `GET http://localhost:3000/api/v1/books`
 
 **Responses:**
+
 Authors
 ```json
 {
