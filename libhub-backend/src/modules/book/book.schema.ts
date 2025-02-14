@@ -1,16 +1,6 @@
 import {z} from 'zod';
 import { buildJsonSchemas } from "fastify-zod";
 
-
-/*
-id          Int      @id @default(autoincrement())
-  title       String
-  authorId    Int?
-  author      Author?  @relation(fields: [authorId], references: [id])
-  description String   @db.LongText
-  genre       Json     @db.Json
-  published     
- */
 const bookCore = {
     title: z.string({
         required_error: "Title is required",
@@ -23,13 +13,11 @@ const bookCore = {
         required_error: "Description is required",
         invalid_type_error: "Description must be a string"
     }).trim().min(1, { message: "Description is required!" }),
-    genre: z.string().refine((value) => {
-        try {
-            JSON.parse(value)
-            return true
-        } catch (error) {
-            return false
-        }
+    genre: z.object({
+        genre_1: z.string(),
+        genre_2: z.string().optional(),
+        genre_3: z.string().optional(),
+        genre_4: z.string().optional()
     }),
     published: z.number(
         {

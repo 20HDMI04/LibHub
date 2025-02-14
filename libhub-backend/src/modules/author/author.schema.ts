@@ -32,6 +32,14 @@ const authorResponseSchema = z.object({
 
 const authorListResponseSchema = z.array(authorResponseSchema)
 
+const getAuthorByIdSchema = z.object({
+    ...authorCore,
+    ...authorGenerated,
+    books: z.array(z.object({
+        title: z.string()
+    })).optional()
+})
+
 const deleteAuthorSchema = z.object({
     id: z.number()
 })
@@ -46,7 +54,8 @@ export const {schemas: authorSchemas, $ref } = buildJsonSchemas({
     authorResponseSchema,
     authorListResponseSchema,
     deleteAuthorSchema,
-    updateAuthorSchema    
+    updateAuthorSchema,
+    getAuthorByIdSchema    
 }, {$id: "author"})
 
 export type CreateAuthorInput = z.infer<typeof createAuthorSchema>;

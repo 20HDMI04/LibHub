@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { createAuthor, getAuthors, deleteAuthor, updateAuthor } from './author.service';
+import { createAuthor, getAuthors, deleteAuthor, updateAuthor, getAuthorsbyId } from './author.service';
 import { CreateAuthorInput, UpdateAuthorInput } from './author.schema';
 
 export async function registerAuthorHandler(request: FastifyRequest<{Body: CreateAuthorInput}>, reply: FastifyReply) {
@@ -15,6 +15,16 @@ export async function registerAuthorHandler(request: FastifyRequest<{Body: Creat
 export async function getAuthorsHandler() {
     const authors = await getAuthors();
     return authors;
+}
+
+export async function getAuthorsbyIdHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {
+    const id = request.params.id;
+    try {
+        const author = await getAuthorsbyId(id);
+        reply.send(author);
+    } catch (error) {
+        reply.status(500).send(error);
+    }
 }
 
 export async function deleteAuthorHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {

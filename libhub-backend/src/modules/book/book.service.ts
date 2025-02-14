@@ -5,6 +5,7 @@ export async function createBook(input: CreateBookInput) {
     const book = await prisma.book.create({
         data: input
     });
+    return book;
 }
 
 export async function getBooks() {
