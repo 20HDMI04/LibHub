@@ -3,7 +3,6 @@ A project to store some book data and manage it. IMDB + Books = LibHub
 It will be a place where every book lover can write a comment on a book.
 
 # Backend Documentation
----
 ## Backend Tools
 Fastify, Prisma, Mariadb on Docker
 
@@ -11,7 +10,6 @@ Fastify, Prisma, Mariadb on Docker
 This backend system provides APIs for managing books and authors.
 
 ## API Reference
----
 ### Get Author/Books
 Retrieves all Authors and Books ordered by its ID.
 #### Authors
