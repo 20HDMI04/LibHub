@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { registerAuthorHandler, getAuthorsHandler, deleteAuthorHandler } from "./author.controller";
+import { registerAuthorHandler, getAuthorsHandler, deleteAuthorHandler, updateAuthorHandler } from "./author.controller";
 import prisma from "../../utils/prisma";
 import { $ref } from "./author.schema";
 
@@ -37,4 +37,21 @@ export async function authorRoutes(server: FastifyInstance) {
         }
       }
     }, deleteAuthorHandler)
+
+    server.put('/:id', {
+      schema: {
+        response: {
+          204: {
+            type: 'string',
+          },
+        },
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' },
+          },
+        },
+        body: $ref("updateAuthorSchema")
+      }
+    }, updateAuthorHandler)
 }

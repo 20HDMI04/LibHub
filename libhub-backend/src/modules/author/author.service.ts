@@ -1,6 +1,6 @@
 import { createDecipheriv } from "crypto";
 import prisma from "../../utils/prisma";
-import { CreateAuthorInput } from "./author.schema";
+import { CreateAuthorInput, UpdateAuthorInput } from "./author.schema";
 
 export async function createAuthor(input: CreateAuthorInput) {
     const author = await prisma.author.create({
@@ -31,4 +31,15 @@ export async function deleteAuthor(id: number) {
             id
         }
     });
+}
+
+export async function updateAuthor(id: number, input: UpdateAuthorInput) {
+    return await prisma.author.update({
+        where: {
+            id
+        },
+        data: {
+            ...input
+        }
+    }); 
 }

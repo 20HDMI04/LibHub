@@ -36,10 +36,18 @@ const deleteAuthorSchema = z.object({
     id: z.number()
 })
 
+const updateAuthorSchema = z.object({
+    name: z.string({}).optional(),
+    bio: z.string({}).optional()
+})
+
 export const {schemas: authorSchemas, $ref } = buildJsonSchemas({
     createAuthorSchema,
     authorResponseSchema,
-    authorListResponseSchema    
+    authorListResponseSchema,
+    deleteAuthorSchema,
+    updateAuthorSchema    
 }, {$id: "author"})
 
 export type CreateAuthorInput = z.infer<typeof createAuthorSchema>;
+export type UpdateAuthorInput = z.infer<typeof updateAuthorSchema>;
