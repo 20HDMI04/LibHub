@@ -7,6 +7,13 @@ export default async function bookRoutes(server: FastifyInstance) {
     
   server.get('/', {
     schema:{
+      querystring:{
+        type: 'object',
+        properties:{
+          page: {type: 'string'},
+          pageSize: {type: 'string'}
+        }
+      },
       response: {
         200: $ref("booksResponseSchema")
       }

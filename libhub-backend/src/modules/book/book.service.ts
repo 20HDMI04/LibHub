@@ -8,8 +8,10 @@ export async function createBook(input: CreateBookInput) {
     return book;
 }
 
-export async function getBooks() {
+export async function getBooks(numberofskip: number, pageSize: number) {
     return await prisma.book.findMany({
+        skip: numberofskip,
+        take: pageSize,
         select: {
             id: true,
             title: true,
