@@ -1,8 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { createBook, getBookbyId } from "./book.service";
+import { createBook, getBookbyId, updateBook, getBooks, deleteBook} from "./book.service";
 import { CreateBookInput } from "./book.schema";
-import { getBooks } from "./book.service";
-import { deleteBook } from "./book.service";
 
 export async function registerBookHandler(request: FastifyRequest<{Body: CreateBookInput}>, reply: FastifyReply) {
     const body = request.body;
@@ -39,11 +37,35 @@ export async function getBookbyIdHandler(request: FastifyRequest<{Params: {id: n
     }
 }
 
+export async function updateBookHandler(request: FastifyRequest<{Params: {id: number},Body:CreateBookInput}>, reply: FastifyReply) {
+    const id = request.params.id;
+    const body = request.body;
+    const obj = await getBookbyId(id);
+    if (body.genre.genre_1 === null|| body.genre.genre_1 === undefined){
+        body.genre.genre_1 = obj.genre.genre_1;
+    }
+    if (body.genre.genre_2 === null||body.genre.genre_2 === undefined && obj.genre.genre_2 !== null){
+        body.genre.genre_2 = obj.genre.genre_2;
+    }
+    if (body.genre.genre_3 === null||body.genre.genre_3 === undefined && obj.genre.genre_3 !== null){
+        body.genre.genre_3 = obj.genre.genre_3;
+    }
+    if (body.genre.genre_4 === null||body.genre.genre_4 === undefined && obj.genre.genre_4 !== null){
+        body.genre.genre_4 = obj.genre.genre_4;
+    }
+    try {
+        const book = await updateBook(id, body);
+        reply.status(204).send(book);
+    } catch (error) {
+        reply.status(500).send(error);
+    }
+}
+
 export async function deleteBookHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {
     const id = request.params.id;
     try {
         await deleteBook(id);
-        reply.code(204).send("Book deleted successfully");
+        reply.status(204).send("Book deleted successfully");
     } catch (error) {
         reply.status(500).send(error);
     }

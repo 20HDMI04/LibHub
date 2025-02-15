@@ -41,10 +41,6 @@ const bookResponseSchema = z.object({
 
 const booksResponseSchema = z.array(bookResponseSchema)
 
-const bookDeleteSchema = z.object({
-    id: z.number()
-})
-
 const getBookByIdSchema = z.object({
     id: z.number(),
     ...bookCore,
@@ -54,11 +50,42 @@ const getBookByIdSchema = z.object({
     }).optional()
 })
 
+const bookUpdateSchema = z.object({
+    title: z.string({
+        invalid_type_error: "Title must be a string"
+    }).trim().min(1, { message: "Title is required!" }).optional(),
+    authorId: z.number({
+            invalid_type_error: "Author ID must be a number"
+        }).optional(),    
+    description: z.string({
+        invalid_type_error: "Description must be a string"
+    }).trim().min(1, { message: "Description is required!" }).optional(),
+    genre: z.object({
+        genre_1: z.string().optional(),
+        genre_2: z.string().optional(),
+        genre_3: z.string().optional(),
+        genre_4: z.string().optional()
+    }).optional(),
+    published: z.number(
+        {
+            invalid_type_error: "Published must be a number"
+        }
+    ).optional(),
+})
+
+const bookDeleteSchema = z.object({
+    id: z.number()
+})
+
+
+
 export const {schemas: bookSchemas, $ref } = buildJsonSchemas({
     createBookSchema,
     bookResponseSchema,
     booksResponseSchema,
     bookDeleteSchema,
-    getBookByIdSchema
+    getBookByIdSchema,
+    bookUpdateSchema
 }, {$id: "book"})
 export type CreateBookInput = z.infer<typeof createBookSchema>;
+export type UpdateBookInput = z.infer<typeof bookUpdateSchema>;

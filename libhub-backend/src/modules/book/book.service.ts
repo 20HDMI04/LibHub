@@ -1,5 +1,5 @@
 import prisma from "../../utils/prisma";
-import { CreateBookInput } from "./book.schema";
+import { CreateBookInput, UpdateBookInput } from "./book.schema";
 
 export async function createBook(input: CreateBookInput) {
     const book = await prisma.book.create({
@@ -47,6 +47,16 @@ export async function getBookbyId(id: number) {
             }
         }
     });
+}
+
+export async function updateBook(id: number, input: UpdateBookInput) {
+    const book = await prisma.book.update({
+        where: {
+            id
+        },
+        data: input
+    });
+    return book;
 }
 
 export async function deleteBook(id: number) {

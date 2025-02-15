@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler } from "./book.controller";
+import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler, updateBookHandler } from "./book.controller";
 import prisma from "../../utils/prisma";
 import { $ref } from "./book.schema";
 
@@ -43,6 +43,21 @@ export default async function bookRoutes(server: FastifyInstance) {
         },
       }
     } ,registerBookHandler)
+  
+    server.put('/:id', {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'number' }
+          }
+        },
+        body: $ref("bookUpdateSchema"),
+        response: {
+          204: $ref("bookResponseSchema")
+        }
+      }
+    }, updateBookHandler)
 
     server.delete('/:id', {
       schema: {
@@ -54,7 +69,7 @@ export default async function bookRoutes(server: FastifyInstance) {
         },
         response: {
           204: {
-            type: 'null'
+            type: 'string'
           }
         }
       }
