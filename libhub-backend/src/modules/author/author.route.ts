@@ -23,7 +23,7 @@ export async function authorRoutes(server: FastifyInstance) {
         params: {
           type: 'object',
           properties: {
-            id: { type: 'number' },
+            id: { type: 'number'},
           },
         },
         response: {

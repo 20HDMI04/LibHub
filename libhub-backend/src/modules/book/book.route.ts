@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { registerBookHandler, getBooksHandler, deleteBookHandler } from "./book.controller";
+import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler } from "./book.controller";
 import prisma from "../../utils/prisma";
 import { $ref } from "./book.schema";
 
@@ -20,7 +20,19 @@ export default async function bookRoutes(server: FastifyInstance) {
     }
   }, getBooksHandler)
 
-  //TODO adding get books by id
+  server.get('/:id', {
+        schema: {
+          params: {
+            type: 'object',
+            properties: {
+              id: { type: 'number' },
+            },
+          },
+          response: {
+            200: $ref("getBookByIdSchema")
+          }
+        }
+      }, getBookbyIdHandler)
   
   server.post('/',
     {

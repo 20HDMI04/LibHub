@@ -28,6 +28,27 @@ export async function getBooks(numberofskip: number, pageSize: number) {
     });
 }
 
+export async function getBookbyId(id: number) {
+    return await prisma.book.findUnique({
+        where: {
+            id
+        },
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            genre: true,
+            published: true,
+            author: {
+                select: {
+                    name: true,
+                    bio: true
+                }
+            }
+        }
+    });
+}
+
 export async function deleteBook(id: number) {
     return await prisma.book.delete({
         where: {

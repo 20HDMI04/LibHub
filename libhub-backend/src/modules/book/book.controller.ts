@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { createBook } from "./book.service";
+import { createBook, getBookbyId } from "./book.service";
 import { CreateBookInput } from "./book.schema";
 import { getBooks } from "./book.service";
 import { deleteBook } from "./book.service";
@@ -24,6 +24,16 @@ export async function getBooksHandler(request: FastifyRequest<{Querystring: {pag
         const skip = (page - 1) * pageSize;
         const books = await getBooks(skip,pageSize);
         reply.status(200).send(books);
+    } catch (error) {
+        reply.status(500).send(error);
+    }
+}
+
+export async function getBookbyIdHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {
+    const id = request.params.id;
+    try {
+        const book = await getBookbyId(id);
+        reply.send(book);
     } catch (error) {
         reply.status(500).send(error);
     }
