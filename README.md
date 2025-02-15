@@ -11,11 +11,18 @@ This backend system provides APIs for managing books and authors.
 
 ## API Reference
 ### Get Author/Books
-Retrieves all Authors and Books ordered by its ID.
+Retrieves the first 5 Authors or Books ordered by its ID.
+You could also specify how many items you need at the same time and what page you need.
 #### Authors
 `GET http://localhost:3000/api/v1/authors`
 #### Books
 `GET http://localhost:3000/api/v1/books`
+#### Authors Specified
+`GET http://localhost:3000/api/v1//authors?page=1&pageSize=5`
+You will get the first five author.
+#### Books Specified
+`GET http://localhost:3000/api/v1/books?page=1&pageSize=5`
+You will get the first five book.
 
 **Responses:**
 
@@ -33,14 +40,15 @@ Retrieves all Authors and Books ordered by its ID.
 #### Books
 ```json
 {
-  {
-    "id": 1,
-    "title": "Ningen Sikkaku (No Longer Human)",
-    "description": "It tells the story of a troubled man incapable of revealing his true self to others, and who, instead, maintains a façade of hollow jocularity, later turning to a life of alcoholism and drug abuse before his final disappearance.",
-    "genre": "{ 1:'Novel', 2:'Fiction'}",
-    "published": 1948,
-    "author": {}
-  }
+  "id": 1,
+  "title": "Ningen Sikkaku (No Longer Human)",
+  "description": "It tells the story of a troubled man incapable of revealing his true self to others, and who, instead, maintains a façade of hollow jocularity, later turning to a life of alcoholism and drug abuse before his final disappearance.",
+  "genre": {
+    "genre_1":"some genre",
+    "genre_2":"some genre (optional)"
+  },
+  "published": 1948,
+  "author": {}
 }
 ```
 
