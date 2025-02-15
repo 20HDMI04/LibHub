@@ -13,6 +13,8 @@ export default async function bookRoutes(server: FastifyInstance) {
     }
   }, getBooksHandler)
 
+  //TODO adding get books by id
+  
   server.post('/',
     {
       schema: {

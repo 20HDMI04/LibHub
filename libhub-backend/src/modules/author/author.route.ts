@@ -5,6 +5,13 @@ import { $ref } from "./author.schema";
 export async function authorRoutes(server: FastifyInstance) {
     server.get("/",{
       schema:{
+        querystring:{
+          type: 'object',
+          properties:{
+            page: {type: 'string'},
+            pageSize: {type: 'string'}
+          }
+        },
         response: {
           200: $ref("authorListResponseSchema")
         }

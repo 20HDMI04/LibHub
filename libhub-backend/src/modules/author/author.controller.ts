@@ -12,9 +12,20 @@ export async function registerAuthorHandler(request: FastifyRequest<{Body: Creat
     }
 }
 
-export async function getAuthorsHandler() {
-    const authors = await getAuthors();
-    return authors;
+export async function getAuthorsHandler(request: FastifyRequest<{Querystring: {page: string, pageSize:string}}>, reply: FastifyReply) {
+    const page = parseInt(request.query.page) || 1;
+    const pageSize = parseInt(request.query.pageSize) || 5;
+    if (isNaN(page) || page < 1 || isNaN(pageSize) || pageSize < 1) {
+        return reply.status(400).send({ error: 'Invalid page or pageSize parameters' });
+    }
+    try {
+        const skip = (page - 1) * pageSize;
+        const authors = await getAuthors(skip,pageSize);
+        reply.status(200).send(authors);
+    } catch (error) {
+        reply.status(500).send(error);
+    }
+    
 }
 
 export async function getAuthorsbyIdHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {

@@ -9,8 +9,10 @@ export async function createAuthor(input: CreateAuthorInput) {
     return author;
 }
 
-export async function getAuthors() {
+export async function getAuthors(numberofskip: number, pageSize: number) {
     return await prisma.author.findMany({
+        skip: numberofskip,
+        take: pageSize,
         select: {
             id: true,
             name: true,
