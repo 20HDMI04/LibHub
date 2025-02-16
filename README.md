@@ -140,7 +140,7 @@ Create one instance of an Author or a Book.
 ```
 
 ### Delete Author/Books by its ID
-Retrieves a specific Author or Book by its ID.
+Delete a specific Author or Book by its ID.
 #### Authors
 `DELETE http://localhost:3000/api/v1/authors/2`
 #### Books
