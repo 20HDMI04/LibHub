@@ -14,6 +14,10 @@ async function main() {
     server.addSchema(schema)
   }
 
+  server.register(require('@fastify/swagger'));
+  server.register(require('@fastify/swagger-ui'),{
+    routePrefix: '/documentation',
+  });
   server.register(bookRoutes, {prefix: 'api/v1/books'});
   server.register(authorRoutes, {prefix: 'api/v1/authors'});
 
