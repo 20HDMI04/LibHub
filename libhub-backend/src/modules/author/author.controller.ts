@@ -1,15 +1,37 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { createAuthor, getAuthors, deleteAuthor, updateAuthor, getAuthorsbyId } from './author.service';
 import { CreateAuthorInput, UpdateAuthorInput } from './author.schema';
+import { Multipart, MultipartFile } from '@fastify/multipart';
+import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import crypto from 'crypto';
+import { s3Client } from '../../server';
 
-export async function registerAuthorHandler(request: FastifyRequest<{Body: CreateAuthorInput}>, reply: FastifyReply) {
-    const body = request.body;
-    try {
-        const author = await createAuthor(body);
-        reply.code(201).send(author);
-    } catch (error) {
-        reply.status(500).send(error);
-    }
+export async function registerAuthorHandler(request: FastifyRequest<{Body: { name: string, bio: string} & MultipartFile}>, reply: FastifyReply) {
+        const file: any = request.file;
+        if (!file) {
+          return reply.code(400).send('No file uploaded');
+        }
+        const rand = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
+        const uid = rand()
+          const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: uid,
+            Body: await file.buffer,
+            ContentType: file.mimetype
+          };
+          const upload = new PutObjectCommand(params)
+          s3Client.send(upload)
+        const obj = {
+            name: request.body.name,
+            bio: request.body.bio,
+            picture: uid
+        }
+        try {
+            const author = await createAuthor(obj);
+            reply.code(201).send(author);
+        } catch (error) {
+            reply.status(500).send(error);
+        }
 }
 
 export async function getAuthorsHandler(request: FastifyRequest<{Querystring: {page: string, pageSize:string}}>, reply: FastifyReply) {
@@ -40,7 +62,18 @@ export async function getAuthorsbyIdHandler(request: FastifyRequest<{Params: {id
 
 export async function deleteAuthorHandler(request: FastifyRequest<{Params: {id: number}}>, reply: FastifyReply) {
     const id = request.params.id;
-    try {
+    const del = await getAuthorsbyId(id);
+    if (!del) {
+        reply.status(404).send("Author not found");
+    }
+    console.log(await del)
+    try {    
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: del.picture
+        };
+        const deleteFile = new DeleteObjectCommand(params)
+        s3Client.send(deleteFile)
         await deleteAuthor(id);
         reply.code(204).send("Author deleted successfully");
     } catch (error) {

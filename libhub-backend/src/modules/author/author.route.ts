@@ -1,6 +1,8 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { registerAuthorHandler, getAuthorsHandler, deleteAuthorHandler, updateAuthorHandler, getAuthorsbyIdHandler } from "./author.controller";
 import { $ref } from "./author.schema";
+import { upload } from "../../server";
+import { MultipartFile } from "@fastify/multipart";
 
 export async function authorRoutes(server: FastifyInstance) {
     server.get("/",{
@@ -32,15 +34,9 @@ export async function authorRoutes(server: FastifyInstance) {
       }
     }, getAuthorsbyIdHandler)
 
-  server.post('/',
-    {
-      schema: {
-        body: $ref("createAuthorSchema"),
-        response: {
-          201: $ref("authorResponseSchema"),
-        },
-      }
-    } ,registerAuthorHandler)
+  server.post<{Body: { name: string, bio: string } & MultipartFile}>('/',
+    { preHandler: upload.single('image'), handler: registerAuthorHandler }
+  );
 
     server.delete('/:id', {
       schema: {

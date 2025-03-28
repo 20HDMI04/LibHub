@@ -1,11 +1,32 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { createBook, getBookbyId, updateBook, getBooks, deleteBook} from "./book.service";
 import { CreateBookInput } from "./book.schema";
+import { MultipartFile } from "@fastify/multipart";
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client } from "../../server";
+import crypto from 'crypto';
+import { FormData } from "formdata-node";
 
-export async function registerBookHandler(request: FastifyRequest<{Body: CreateBookInput}>, reply: FastifyReply) {
-    const body = request.body;
+export async function registerBookHandler(request: FastifyRequest<{Body: FormData}>, reply: FastifyReply) {
+    const body:any = request.body;
+    const obj:CreateBookInput = JSON.parse(body.document as string);
+    const file: any = request.file;
+            if (!file) {
+              return reply.code(400).send('No file uploaded');
+            }
+            const rand = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
+            const uid = rand()
+              const params = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: uid,
+                Body: await file.buffer,
+                ContentType: file.mimetype
+              };
+              const upload = new PutObjectCommand(params)
+              s3Client.send(upload)
+            obj.picture = uid;
     try {
-        const book = await createBook(body);
+        const book = await createBook(obj);
         reply.code(201).send(book);
     } catch (error) {
         reply.status(500).send(error);

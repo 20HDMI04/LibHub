@@ -10,6 +10,7 @@ const authorCore = {
         required_error: "Bio is required",
         invalid_type_error: "Bio must be a string"
     }).trim().min(1, { message: "Bio is required!" }),
+    picture: z.any()
 }
 
 const authorGenerated = {
@@ -46,7 +47,8 @@ const deleteAuthorSchema = z.object({
 
 const updateAuthorSchema = z.object({
     name: z.string({}).optional(),
-    bio: z.string({}).optional()
+    bio: z.string({}).optional(),
+    picture: z.any().optional()
 })
 
 export const {schemas: authorSchemas, $ref } = buildJsonSchemas({

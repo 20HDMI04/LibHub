@@ -24,6 +24,7 @@ const bookCore = {
             invalid_type_error: "Published must be a number"
         }
     ),
+    picture: z.string({required_error: "Picture is required"})
 }
 
 const createBookSchema = z.object({
@@ -71,6 +72,7 @@ const bookUpdateSchema = z.object({
             invalid_type_error: "Published must be a number"
         }
     ).optional(),
+    picture: z.string().optional()
 })
 
 const bookDeleteSchema = z.object({

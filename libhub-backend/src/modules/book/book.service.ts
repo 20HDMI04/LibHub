@@ -1,9 +1,13 @@
+import { MultipartFile } from "@fastify/multipart";
 import prisma from "../../utils/prisma";
 import { CreateBookInput, UpdateBookInput } from "./book.schema";
+import { object } from "zod";
+import { FormData } from "formdata-node";
 
 export async function createBook(input: CreateBookInput) {
+    console.log(input);
     const book = await prisma.book.create({
-        data: input
+        data: input,
     });
     return book;
 }
@@ -23,7 +27,8 @@ export async function getBooks(numberofskip: number, pageSize: number) {
                     name: true,
                     bio: true
                 }
-            }
+            },
+            picture: true
         }
     });
 }
@@ -44,7 +49,8 @@ export async function getBookbyId(id: number) {
                     name: true,
                     bio: true
                 }
-            }
+            },
+            picture: true
         }
     });
 }

@@ -37,6 +37,7 @@ export async function getAuthorsbyId(id: number) {
             id: true,
             name: true,
             bio: true,
+            picture: true,
             createdAt: true,
             updatedAt: true,
             books: {

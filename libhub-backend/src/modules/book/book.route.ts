@@ -1,7 +1,9 @@
 import { FastifyInstance } from "fastify";
 import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler, updateBookHandler } from "./book.controller";
-import prisma from "../../utils/prisma";
-import { $ref } from "./book.schema";
+import { $ref, CreateBookInput } from "./book.schema";
+import { MultipartFile } from "@fastify/multipart";
+import { upload } from "../../server";
+import { FormData } from "formdata-node";
 
 export default async function bookRoutes(server: FastifyInstance) {
     
@@ -33,16 +35,10 @@ export default async function bookRoutes(server: FastifyInstance) {
           }
         }
       }, getBookbyIdHandler)
-  
-  server.post('/',
-    {
-      schema: {
-        body: $ref("createBookSchema"),
-        response: {
-          201: $ref("bookResponseSchema"),
-        },
-      }
-    } ,registerBookHandler)
+
+    server.post<{Body: FormData}>('/',
+        { preHandler: upload.single('image'), handler: registerBookHandler }
+    );
   
     server.put('/:id', {
       schema: {
