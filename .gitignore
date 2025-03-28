@@ -30,3 +30,12 @@ coverage/
 # Ignore Prisma files
 prisma/
 *.prisma
+
+# Ignore TypeScript declaration files
+*.d.ts
+*.d.ts.map
+
+# Ignore volume and other generated folders
+volume/
+localstack-data/
+
