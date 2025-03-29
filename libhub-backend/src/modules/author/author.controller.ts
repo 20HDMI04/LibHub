@@ -5,8 +5,11 @@ import { Multipart, MultipartFile } from '@fastify/multipart';
 import { PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import crypto from 'crypto';
 import { s3Client } from '../../server';
+import { FormData } from "formdata-node";
 
-export async function registerAuthorHandler(request: FastifyRequest<{Body: { name: string, bio: string} & MultipartFile}>, reply: FastifyReply) {
+export async function registerAuthorHandler(request: FastifyRequest<{Body: FormData}>, reply: FastifyReply) {
+        const body:any = request.body;
+        const obj:CreateAuthorInput = JSON.parse(body.document as string);
         const file: any = request.file;
         if (!file) {
           return reply.code(400).send('No file uploaded');
@@ -21,11 +24,7 @@ export async function registerAuthorHandler(request: FastifyRequest<{Body: { nam
           };
           const upload = new PutObjectCommand(params)
           s3Client.send(upload)
-        const obj = {
-            name: request.body.name,
-            bio: request.body.bio,
-            picture: uid
-        }
+        obj.picture = uid;
         try {
             const author = await createAuthor(obj);
             reply.code(201).send(author);

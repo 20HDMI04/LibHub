@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { createBook, getBookbyId, updateBook, getBooks, deleteBook} from "./book.service";
 import { CreateBookInput } from "./book.schema";
-import { MultipartFile } from "@fastify/multipart";
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { s3Client } from "../../server";
 import crypto from 'crypto';

@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { registerAuthorHandler, getAuthorsHandler, deleteAuthorHandler, updateAuthorHandler, getAuthorsbyIdHandler } from "./author.controller";
 import { $ref } from "./author.schema";
 import { upload } from "../../server";
-import { MultipartFile } from "@fastify/multipart";
+import { FormData } from "formdata-node";
 
 export async function authorRoutes(server: FastifyInstance) {
     server.get("/",{
@@ -34,7 +34,7 @@ export async function authorRoutes(server: FastifyInstance) {
       }
     }, getAuthorsbyIdHandler)
 
-  server.post<{Body: { name: string, bio: string } & MultipartFile}>('/',
+  server.post<{Body: FormData }>('/',
     { preHandler: upload.single('image'), handler: registerAuthorHandler }
   );
 
