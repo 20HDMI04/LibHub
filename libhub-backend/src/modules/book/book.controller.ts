@@ -32,6 +32,18 @@ export async function registerBookHandler(request: FastifyRequest<{Body: FormDat
     }
 }
 
+export async function getMainBooksHandler(request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const page = 1;
+            const pageSize = 7;
+            const skip = (page - 1) * pageSize;
+            const books = await getBooks(skip,pageSize);
+            return reply.status(200).send({ main: books });
+        } catch (error) {
+            return reply.status(500).send("Error:"+error);
+        }
+}
+
 export async function getBooksHandler(request: FastifyRequest<{Querystring: {page: string,pageSize:string}}>, reply: FastifyReply) {
     const page = parseInt(request.query.page) || 1;
     const pageSize = parseInt(request.query.pageSize) || 5;

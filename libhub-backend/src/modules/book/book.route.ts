@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler, updateBookHandler } from "./book.controller";
+import { registerBookHandler, getBooksHandler, deleteBookHandler, getBookbyIdHandler, updateBookHandler, getMainBooksHandler } from "./book.controller";
 import { $ref, CreateBookInput } from "./book.schema";
 import { MultipartFile } from "@fastify/multipart";
 import { upload } from "../../server";
@@ -21,6 +21,14 @@ export default async function bookRoutes(server: FastifyInstance) {
       }
     }
   }, getBooksHandler)
+
+  server.get('/main',{
+    schema: {
+      response: {
+        200: $ref("mainBookResponseSchema")
+      }
+    }
+  }, getMainBooksHandler)
 
   server.get('/:id', {
         schema: {
